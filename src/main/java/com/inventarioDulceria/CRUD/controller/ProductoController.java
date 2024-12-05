@@ -49,4 +49,17 @@ public class ProductoController {
         productoService.eliminarLogicamente(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "Producto eliminado exitosamente", null));
     }
+    
+    @Operation(summary = "Actualizar un producto", description = "Actualiza los detalles de un producto existente.")
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Producto>> actualizarProducto(@PathVariable Integer id, @RequestBody Producto producto) {
+        // Verificar que el ID del path coincida con el ID del producto
+        if (!id.equals(producto.getIdProducto())) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "El ID del producto no coincide", null));
+        }
+
+        // Actualizar el producto
+        Producto productoActualizado = productoService.guardar(producto);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Producto actualizado exitosamente", productoActualizado));
+    }
 }
